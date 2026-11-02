@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<title>Ҳадислар — Дастур нашрлари тарихи</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="hadis-version" content="23">
+<link rel="icon" href="assets/brand/favicon.svg?v=1" type="image/svg+xml">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131210" media="(prefers-color-scheme: dark)">
+<script>
+  try { var t = (JSON.parse(localStorage.getItem('hadis-settings') || '{}').theme) || 'auto';
+        if (/^(light|dark|sepia|contrast)$/.test(t)) document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+</script>
+<link rel="preload" href="fonts/SourceSans3-Uz.woff2?v=1" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/SourceSerif4-Uz.woff2?v=1" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="style.css?v=23">
+</head>
+<body class="page-site">
+<header class="site-head"><div class="in">
+  <a class="home" href="./"><img class="logo" src="assets/brand/logo.svg?v=1" width="28" height="28" alt=""><span data-i18n="appName">Ҳадислар</span></a>
+  <nav class="site-nav"><a href="./" data-i18n="sitePanel">Панель</a><a href="install.html" data-i18n="install">Ўрнатиш</a><a href="sources.html" data-i18n="sources">Манбалар</a><a href="help.html" data-i18n="help">Ёрдам</a><a href="releases.html" data-i18n="whatsNew" aria-current="page">Дастур нашри</a></nav>
+  <div id="script" class="seg small-seg" role="group" aria-label="Ёзув / Yozuv" translate="no"><button type="button" data-s="uz_new" lang="uz-Latn">Öz</button><button type="button" data-s="uz" lang="uz-Cyrl">Ўз</button><button type="button" data-s="uz_latn" lang="uz-Latn">Oʼz</button></div>
+</div></header>
+<main class="page">
+  <div class="top">
+    <h1><span class="pre"><span data-l="uz">Ҳадислар</span><span data-l="uz_latn">Hadislar</span></span><span data-l="uz">Дастур нашрлари тарихи</span><span data-l="uz_latn">Dastur nashrlari tarixi</span></h1>
+  </div>
+  <p class="lead" id="t-intro"></p>
+  <div id="list"></div>
+  <p class="author"><span data-i18n="author">Абдуллоҳ Ҳамидуллоҳ ал-Мадийний</span> · <a href="mailto:hadis@abdulloh.org">hadis@abdulloh.org</a> · <a href="help.html" data-i18n="help">Ёрдам</a> · <a href="sources.html" data-i18n="sources">Манбалар</a> · <a href="install.html" data-i18n="install">Ўрнатиш</a> · <a href="releases.html" data-i18n="whatsNew">Дастур нашри</a> · <a href="privacy.html" data-i18n="privacy">Махфийлик</a> · <a href="terms.html" data-i18n="terms">Шартлар</a></p>
+</main>
+<script src="i18n.js?v=23"></script>
+<script src="releases.js?v=23"></script>
+<script>
+/* the list of releases in the alphabet chosen by legal.js (it calls window.HadisPage) */
+(function () {
+  'use strict';
+  var T = {
+    uz: { title: 'Дастур нашрлари тарихи', intro: 'Дастурнинг барча нашрлари ва улардаги ўзгаришлар.', latest: 'Энг охиргиси', year: 'йил' },
+    uz_latn: { title: 'Dastur nashrlari tarixi', intro: 'Dasturning barcha nashrlari va ulardagi oʻzgarishlar.', latest: 'Eng oxirgisi', year: 'yil' }
+  };
+  var MONTHS = { uz: ['январь','февраль','март','апрель','май','июнь','июль','август','сентябрь','октябрь','ноябрь','декабрь'],
+    uz_latn: ['yanvar','fevral','mart','aprel','may','iyun','iyul','avgust','sentabr','oktabr','noyabr','dekabr'] };
+  var R = window.HadisReleases || [];
+  function date(d, l) { var p = d.split('-'); return +p[2] + '-' + MONTHS[l][+p[1] - 1] + ' ' + p[0] + '-' + T[l].year; }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  window.HadisPage = function (l) {
+    if (!T[l]) l = 'uz';
+    document.getElementById('t-intro').textContent = T[l].intro;
+    document.getElementById('list').innerHTML = R.map(function (r, i) {
+      return '<section class="rel' + (i ? '' : ' latest') + '"><h2><span class="ver">' + esc(r[0]) + '</span>' + esc(r[2][l] || r[2].uz) +
+        (i ? '' : ' <span class="tag">' + T[l].latest + '</span>') + '<span class="date">' + date(r[1], l) + '</span></h2>' +
+        '<ul>' + (r[3][l] || r[3].uz).map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></section>';
+    }).join('');
+  };
+})();
+</script>
+<script src="text.js?v=23"></script>
+<script src="legal.js?v=23"></script>
+</body>
+</html>

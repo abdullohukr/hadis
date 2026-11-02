@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ҳадислар</title>
+<meta name="hadis-version" content="23">
+<link rel="icon" href="assets/brand/favicon.svg?v=1" type="image/svg+xml">
+<link rel="preload" href="fonts/SourceSans3-Uz.woff2?v=1" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/SourceSerif4-Uz.woff2?v=1" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/ScheherazadeNew-Regular.woff2?v=4" as="font" type="font/woff2" crossorigin>
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131210" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="style.css?v=23">
+<script>
+/* Office.js only where this page is a Word add-in. In the frame of another host (browser extension, Google Docs, WordPress)
+   it stops the page and leaves a blank screen. Same blocking order as a normal script tag. */
+if (!/[?&]host=(gdocs|wp|ext|tg)\b/.test(location.search)) document.write('<script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"><\/script>');
+</script>
+<script src="i18n.js?v=23"></script>
+<script src="text.js?v=23"></script>
+<script src="search.js?v=23"></script>
+<script src="core.js?v=23"></script>
+<script>
+  /* theme before the first paint */
+  try { var t = (JSON.parse(localStorage.getItem('hadis-settings') || '{}').theme) || 'auto';
+        if (t !== 'auto') document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+</script>
+</head>
+<body class="starting">
+<header class="topbar">
+  <div class="brand"><img class="logo" src="assets/brand/logo.svg?v=1" width="28" height="28" alt=""><h1 data-i18n="appName">Ҳадислар</h1><span id="host-badge" class="badge" hidden>Word</span></div>
+  <button type="button" id="hist-btn" class="icon-btn" data-i18n-title="history" aria-label="Тарих" aria-expanded="false" aria-controls="marks-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span id="hist-n" class="n"></span></button>
+  <button type="button" id="fav-btn" class="icon-btn" data-i18n-title="favorites" aria-label="Сараланганлар" aria-expanded="false" aria-controls="marks-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3.6 2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/></svg><span id="fav-n" class="n"></span></button>
+  <button type="button" id="bask-btn" class="icon-btn" data-i18n-title="basket" aria-label="Сават" aria-expanded="false" aria-controls="marks-panel"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h16l-1.6 9.2a2 2 0 0 1-2 1.8H7.6a2 2 0 0 1-2-1.8L4 9Z"/><path d="m8 9 3-5M16 9l-3-5"/></svg><span id="bask-n" class="n"></span></button>
+  <button type="button" id="theme-btn" class="icon-btn" data-i18n-title="darkTheme" aria-label="Қоронғи / ёруғ мавзу" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg></button>
+  <button type="button" id="settings-btn" class="icon-btn" data-i18n-title="settings" aria-label="Созламалар"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></button>
+</header>
+
+<main>
+  <section id="day" class="day card" hidden aria-labelledby="day-h">
+    <div class="day-head"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.5 1.5M17.2 17.2l1.5 1.5M5.3 18.7l1.5-1.5M17.2 6.8l1.5-1.5"/></svg><h2 id="day-h" data-i18n="hadithOfDay"></h2><a id="day-ref" class="muted small" href="#" data-i18n-title="dayFull"></a>
+      <button type="button" id="day-close" class="icon-btn" data-i18n-title="close" aria-label="Ёпиш"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <div id="day-ar" class="day-ar" dir="rtl" lang="ar"></div>
+    <div id="day-uz" class="day-uz" dir="ltr"></div>
+    <div class="day-actions"><button type="button" id="day-full" class="link small" data-i18n="dayFull"></button>
+      <button type="button" id="day-fav" class="icon-btn star" aria-pressed="false" data-i18n-title="favAdd" aria-label="Сараланганларга қўшиш"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3.6 2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/></svg></button>
+      <button type="button" id="day-copy" class="btn" data-i18n="copy"></button><button type="button" id="day-insert" class="btn primary" data-i18n="insert"></button></div>
+  </section>
+  <div class="pin"><section class="card pin-card">
+    <div class="search-box"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg><input id="q" type="search" autocomplete="off" dir="auto" list="recent-q" data-i18n-placeholder="search"><datalist id="recent-q"></datalist></div>
+    <div class="pick">
+      <select id="book" aria-label="Китоб" data-i18n-title="book"></select>
+      <input id="num" type="text" inputmode="numeric" autocomplete="off" aria-label="Ҳадис рақами (масалан 1 ёки 2564/2)" data-i18n-title="numberHint">
+      <button type="button" id="info-btn" class="icon-btn" data-i18n-title="bookInfo" aria-label="Китоб ҳақида"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6"/><circle cx="12" cy="7.6" r=".6" class="fill"/></svg></button>
+    </div>
+  </section></div>
+  <section class="search card" id="found">
+    <div class="marks">
+      <div id="marks-panel" class="marks-panel" hidden>
+        <ul id="marks-list"></ul>
+        <p id="bask-acts" class="bask-acts" hidden><button type="button" id="bask-insert" class="btn primary" data-i18n="basketInsert"></button><button type="button" id="bask-copy" class="btn" data-i18n="basketCopy"></button></p>
+        <p class="marks-foot"><span id="marks-empty" class="muted small"></span><button type="button" id="marks-clear" class="link small" data-i18n="clearAll"></button></p>
+      </div>
+    </div>
+    <div id="status" class="muted small" data-i18n="loading"></div>
+    <p id="deep-note" class="muted small" aria-live="polite"></p>
+    <ol id="results"></ol>
+    <button type="button" id="more" class="link small" hidden data-i18n="showMore"></button>
+  </section>
+
+  <section class="selection card" aria-live="polite">
+    <div class="sel-head">
+      <strong id="sel-title"></strong>
+      <button type="button" id="big-btn" class="icon-btn big-btn" data-i18n-title="bigHint" aria-label="Кенгайтириш" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></svg><span data-i18n="big"></span></button>
+      <button type="button" id="prev" class="icon-btn" data-i18n-title="prevHadith" aria-label="Олдинги ҳадис"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg></button>
+      <button type="button" id="next" class="icon-btn" data-i18n-title="nextHadith" aria-label="Кейинги ҳадис"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
+      <button type="button" id="more-btn" class="icon-btn" data-i18n-title="moreMenu" aria-label="Яна" aria-haspopup="true" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.2" class="fill"/><circle cx="12" cy="12" r="1.2" class="fill"/><circle cx="19" cy="12" r="1.2" class="fill"/></svg></button>
+      <button type="button" id="fav-toggle" class="icon-btn star" aria-pressed="false" aria-label="Сараланганларга қўшиш"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3.6 2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/></svg></button>
+    </div>
+    <div id="more-menu" class="menu" role="menu" hidden>
+      <button type="button" role="menuitem" id="m-text" data-i18n="copyText"></button>
+      <button type="button" role="menuitem" id="m-md" data-i18n="copyMd"></button>
+      <button type="button" role="menuitem" id="m-link" data-i18n="copyLink"></button>
+      <button type="button" role="menuitem" id="m-bask" data-i18n="basketAdd"></button>
+      <button type="button" role="menuitem" id="m-quote" data-i18n="quoteCheck"></button>
+      <button type="button" role="menuitem" id="m-info" data-i18n="bookInfo"></button>
+      <button type="button" role="menuitem" id="m-foot" data-i18n="footnoteIns" hidden></button>
+      <a role="menuitem" id="m-sources" href="sources.html" target="_blank" rel="noopener" data-i18n="sources"></a>
+    </div>
+    <div class="modebar">
+      <div id="mode" class="seg" role="group" data-i18n-title="modeTitle">
+        <button type="button" data-mode="sahabi" data-i18n="modeSahabi" data-i18n-title="modeSahabiHint"></button>
+        <button type="button" data-mode="full" data-i18n="modeFull" data-i18n-title="modeFullHint"></button>
+        <button type="button" data-mode="matn" data-i18n="modeMatn"></button>
+      </div>
+      <div id="chips" class="tchips">
+        <button type="button" class="tchip" data-part="withAr" data-i18n="arabicText"></button>
+        <button type="button" class="tchip" data-part="withUz" data-i18n="uzbekText"></button>
+        <button type="button" class="tchip" data-part="refUz" data-i18n="tahrij"></button>
+      </div>
+      <div id="script" class="seg small-seg" role="group" data-i18n-title="scriptPick" translate="no">
+        <button type="button" data-script="new" lang="uz-Latn">Öz</button>
+        <button type="button" data-script="cyrl" lang="uz-Cyrl">Ўз</button>
+        <button type="button" data-script="latn" lang="uz-Latn">Oʼz</button>
+      </div>
+    </div>
+    <p id="matn-note" class="note small" hidden data-i18n="noMatn"></p>
+    <p id="bob" class="bob" hidden></p>
+    <div id="preview-ar" class="arabic" dir="rtl" lang="ar" data-words="ar"></div>
+    <div id="preview-uz" class="uztext" data-words="uz"></div>
+    <div id="tahrij-box" class="tahrij-box"></div>
+    <p class="sel-foot"><span id="pick-hint" class="muted small" data-i18n="pickHint"></span><span class="sel-acts"><span id="pick-n" class="muted small"></span><button type="button" id="reset-words" class="link small idle" disabled data-i18n="clearPick"></button></span></p>
+    <div class="actions">
+      <button id="insert" class="btn primary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"/></svg><span data-i18n="insert"></span></button>
+      <button id="copy" class="btn"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg><span data-i18n="copy"></span></button>
+      <button id="again" class="btn pic-btn" data-i18n-title="undoInsert" aria-label="Охирги қўйилганни бекор қилиш" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg></button>
+      <button id="copy-pic" class="btn pic-btn" data-i18n-title="copyPicture" aria-label="Расм қилиб нусха олиш"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="m4 17 5-4.5 3.5 3 3-2.5 4.5 4"/></svg></button>
+    </div>
+  </section>
+</main>
+<footer class="author"><span data-i18n="author">Абдуллоҳ Ҳамидуллоҳ ал-Мадийний</span><span id="updates-link"> · <a href="#updates" id="updates-btn" data-i18n="updates">Дастур нашри</a></span> · <a href="help.html" target="_blank" rel="noopener" data-i18n="help">Ёрдам</a> · <a href="sources.html" target="_blank" rel="noopener" data-i18n="sources">Манбалар</a> · <a href="install.html" target="_blank" rel="noopener" data-i18n="install">Ўрнатиш</a> · <a href="privacy.html" target="_blank" rel="noopener" data-i18n="privacy">Махфийлик</a> · <a href="terms.html" target="_blank" rel="noopener" data-i18n="terms">Шартлар</a><span id="app-version" hidden> · <a href="#updates" class="app-version"></a></span></footer>
+
+<dialog id="settings" class="sheet">
+  <form method="dialog">
+    <div class="sheet-head">
+      <h2 data-i18n="settings"></h2>
+      <button value="close" class="icon-btn" data-i18n-title="close" aria-label="Ёпиш"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button type="button" role="tab" data-tab="general" data-i18n="tabGeneral"></button>
+      <button type="button" role="tab" data-tab="insert" data-i18n="tabInsert"></button>
+      <button type="button" role="tab" data-tab="fonts" data-i18n="tabFonts"></button>
+    </nav>
+
+    <div class="sheet-body">
+      <section class="tab" data-tab="general">
+        <label class="field"><span data-i18n="scriptTitle"></span> <select id="s-script" aria-describedby="s-script-hint" translate="no">
+          <option value="new" data-i18n="scriptNew"></option><option value="cyrl" data-i18n="scriptCyrl"></option><option value="latn" data-i18n="scriptLatn"></option></select></label>
+        <p id="s-script-hint" class="small muted" data-i18n="scriptHint"></p>
+        <label class="field"><span data-i18n="aposTitle"></span> <select id="s-apos" translate="no">
+          <option value="mod" data-i18n="aposMod"></option><option value="typo" data-i18n="aposTypo"></option><option value="ascii" data-i18n="aposAscii"></option></select></label>
+        <div class="field"><span data-i18n="theme"></span><div id="s-theme" class="themes" role="radiogroup"></div></div>
+        <label class="switch opt"><span data-i18n="smooth"></span><input type="checkbox" id="s-smooth" aria-describedby="s-smooth-hint"><i></i></label>
+        <p id="s-smooth-hint" class="small muted" data-i18n="smoothHint"></p>
+        <label class="field"><span data-i18n="sortTitle"></span> <select id="s-sort">
+          <option value="books" data-i18n="sortBooks"></option><option value="score" data-i18n="sortScore"></option></select></label>
+        <label class="switch opt"><span data-i18n="dayShow"></span><input type="checkbox" id="s-day"><i></i></label>
+        <label class="field"><span data-i18n="dayCloseSet"></span> <select id="s-day-close">
+          <option value="ask" data-i18n="askMe"></option><option value="day" data-i18n="dayHideDay"></option><option value="off" data-i18n="dayTurnOff"></option></select></label>
+        <div class="opt-group" aria-live="polite">
+          <button type="button" id="s-reset" class="btn" data-i18n="resetSettings"></button>
+          <p class="small muted" data-i18n="resetNote"></p>
+        </div>
+      </section>
+
+      <section class="tab" data-tab="insert">
+        <div class="opt-group">
+          <h3 data-i18n="grpText"></h3>
+          <label class="switch opt"><span data-i18n="arabicText"></span><bdi class="sample ar" dir="rtl">حَدَّثَنَا</bdi><input type="checkbox" id="s-with-ar"><i></i></label>
+          <label class="switch opt"><span data-i18n="uzbekText"></span><bdi class="sample" data-i18n="uzbekText">Ўзбекча</bdi><input type="checkbox" id="s-with-uz"><i></i></label>
+          <label class="field"><span data-i18n="orderTitle"></span> <select id="s-order">
+            <option value="ar" data-i18n="orderAr"></option><option value="uz" data-i18n="orderUz"></option></select></label>
+          <label class="field"><span data-i18n="modeTitle"></span> <select id="s-mode">
+            <option value="sahabi" data-i18n="modeSahabi"></option><option value="full" data-i18n="modeFull"></option><option value="matn" data-i18n="modeMatn"></option></select></label>
+          <label class="switch opt"><span data-i18n="withBob"></span><input type="checkbox" id="s-bob"><i></i></label>
+          <label class="switch opt"><span data-i18n="matnBold"></span><b class="sample">«…»</b><input type="checkbox" id="s-matn-bold"><i></i></label>
+          <label class="switch opt"><span data-i18n="arMatnBold"></span><bdi class="sample ar" dir="rtl"><b>«…»</b></bdi><input type="checkbox" id="s-ar-matn-bold"><i></i></label>
+        </div>
+        <div class="opt-group">
+          <h3 data-i18n="tahrij"></h3>
+          <label class="switch opt"><span data-i18n="refUz"></span><bdi class="sample" id="s-ref-sample"><em>(«Саҳиҳи Бухорий», 1)</em>.</bdi><input type="checkbox" id="s-ref-uz"><i></i></label>
+          <label class="switch opt"><span data-i18n="refAr"></span><bdi class="sample ar" dir="rtl">(رواه البخاري ١)</bdi><input type="checkbox" id="s-ref-ar"><i></i></label>
+          <label class="switch opt"><span data-i18n="withBook"></span><input type="checkbox" id="s-with-book"><i></i></label>
+          <label class="switch opt"><span data-i18n="withHukm"></span><input type="checkbox" id="s-hukm"><i></i></label>
+          <p class="small muted" data-i18n="hukmNote"></p>
+          <label class="switch opt"><span data-i18n="withGrades"></span><input type="checkbox" id="s-grades"><i></i></label>
+          <label class="switch opt"><span data-i18n="allGrades"></span><input type="checkbox" id="s-all-grades"><i></i></label>
+          <label class="switch opt"><span data-i18n="gradesMatn"></span><input type="checkbox" id="s-grades-matn"><i></i></label>
+          <p class="small muted" data-i18n="gradesHint"></p>
+          <label class="field"><span data-i18n="basketSources"></span> <select id="s-bask-src">
+            <option value="list" data-i18n="baskList"></option><option value="each" data-i18n="baskEach"></option></select></label>
+        </div>
+        <div class="opt-group">
+          <h3 data-i18n="insertOptions"></h3>
+          <label class="switch opt"><span data-i18n="newPara"></span><span class="sample">¶</span><input type="checkbox" id="s-newpara"><i></i></label>
+          <label class="field"><span data-i18n="picActionSet"></span> <select id="s-pic-action">
+            <option value="ask" data-i18n="askMe"></option><option value="insert" data-i18n="picInsert"></option><option value="copy" data-i18n="picCopy"></option></select></label>
+          <label class="switch opt"><span data-i18n="picBg"></span><input type="color" id="s-picbg" class="sample" value="#ffffff"><input type="checkbox" id="s-picbg-on"><i></i></label>
+        </div>
+      </section>
+
+      <section class="tab" data-tab="fonts">
+        <div id="f-keys" class="chips" role="tablist"></div>
+        <div class="fmt-card">
+          <div class="fmt-row">
+            <input id="f-font" type="text" list="ar-fonts" aria-label="font">
+            <input id="f-size" type="number" min="6" max="96" aria-label="size">
+          </div>
+          <div class="fmt-row">
+            <div id="f-style" class="seg" role="group">
+              <button type="button" data-p="b" data-i18n-title="bold"><b>B</b></button>
+              <button type="button" data-p="i" data-i18n-title="italic"><i>I</i></button>
+              <button type="button" data-p="u" data-i18n-title="underline"><u>U</u></button>
+            </div>
+            <label class="swatch" data-i18n-title="color"><input id="f-color" type="color" aria-label="color"><span id="f-color-show"></span></label>
+            <button type="button" id="f-color-reset" class="link" data-i18n="auto"></button>
+          </div>
+          <div class="fmt-row para-only">
+            <div id="f-align" class="seg" role="group" data-i18n-title="alignment">
+              <button type="button" data-a="left"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 10h10M4 14h16M4 18h10"/></svg></button>
+              <button type="button" data-a="center"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M7 10h10M4 14h16M7 18h10"/></svg></button>
+              <button type="button" data-a="right"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M10 10h10M4 14h16M10 18h10"/></svg></button>
+              <button type="button" data-a="both"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg></button>
+            </div>
+            <label class="line-sel"><span data-i18n="lineSpacing"></span>
+              <select id="f-line"><option value="0" data-i18n="auto"></option><option>1</option><option>1.15</option><option>1.5</option><option>2</option></select></label>
+          </div>
+          <div id="f-preview" class="fmt-preview"></div>
+        </div>
+        <datalist id="ar-fonts"><option value="Scheherazade New"><option value="Sakkal Majalla"><option value="Traditional Arabic"><option value="Amiri"><option value="Arial"><option value="Times New Roman"></datalist>
+      </section>
+    </div>
+
+    <div class="sheet-foot">
+      <button value="ok" class="btn primary wide" data-i18n="save"></button>
+      <p class="author"><span data-i18n="author">Абдуллоҳ Ҳамидуллоҳ ал-Мадийний</span></p>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="info" class="sheet">
+  <form method="dialog">
+    <div class="sheet-head">
+      <h2 id="info-title"></h2>
+      <button value="close" class="icon-btn" data-i18n-title="close" aria-label="Ёпиш"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <div class="sheet-body"><dl id="info-body" class="info-body"></dl></div>
+  </form>
+</dialog>
+
+<dialog id="updates" class="sheet">
+  <form method="dialog">
+    <div class="sheet-head">
+      <h2 data-i18n="updates">Дастур нашри</h2>
+      <button value="close" class="icon-btn" data-i18n-title="close" aria-label="Ёпиш"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <div class="sheet-body">
+      <div class="upd-state"><p id="upd-status" class="upd-status"></p>
+        <button type="button" id="upd-now" class="btn primary" data-i18n="updNow" hidden>Ҳозир янгилаш</button></div>
+      <section>
+        <h3 data-i18n="whatsNew">Дастур нашри</h3>
+        <div id="upd-news" class="upd-news"></div>
+      </section>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="pic-ask" class="sheet" aria-labelledby="pic-ask-h">
+  <form method="dialog">
+    <div class="sheet-head"><h2 id="pic-ask-h" data-i18n="picTitle"></h2>
+      <button value="close" class="icon-btn" data-i18n-title="close" aria-label="Ёпиш"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <div class="sheet-body"><p data-i18n="picAskQ"></p>
+      <p class="actions"><button value="insert" class="btn primary" data-i18n="picInsert"></button><button value="copy" class="btn" data-i18n="picCopy"></button></p>
+      <label class="switch"><input type="checkbox" id="pic-remember"><i></i> <span data-i18n="dontAskAgain"></span></label></div>
+  </form>
+</dialog>
+
+<!-- «Кенгайтириш»: the hadith big in the middle of the screen; the words are chosen here too (the same selection) -->
+<dialog id="big" class="sheet big" aria-labelledby="big-title">
+  <div class="big-wrap">
+    <div class="sheet-head big-head">
+      <h2 id="big-title"></h2>
+      <div class="seg small-seg big-zoom" role="group" data-i18n-title="bigSize"><button type="button" id="big-minus" aria-label="A−">A−</button><button type="button" id="big-plus" aria-label="A+">A+</button></div>
+      <button type="button" id="big-close" class="icon-btn" data-i18n-title="close" aria-label="Ёпиш"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <div id="big-body" class="big-body">
+      <p id="big-bob" class="bob" hidden></p>
+      <div id="big-ar" class="arabic big-ar" dir="rtl" lang="ar" data-words="ar"></div>
+      <div id="big-uz" class="uztext big-uz" data-words="uz"></div>
+      <div id="big-tahrij" class="tahrij-box"></div>
+    </div>
+    <div class="big-foot">
+      <span id="big-hint" class="muted small" data-i18n="pickHint"></span>
+      <span class="sel-acts"><span id="big-n" class="muted small"></span><button type="button" id="big-reset" class="link small idle" disabled data-i18n="clearPick"></button></span>
+      <span class="actions big-acts"><button type="button" id="big-copy" class="btn" data-i18n="copy"></button><button type="button" id="big-insert" class="btn primary" data-i18n="insert"></button></span>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="day-ask" class="sheet" aria-labelledby="day-ask-h">
+  <form method="dialog">
+    <div class="sheet-head"><h2 id="day-ask-h" data-i18n="hadithOfDay"></h2>
+      <button value="close" class="icon-btn" data-i18n-title="close" aria-label="Ёпиш"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <div class="sheet-body"><p data-i18n="dayAskQ"></p>
+      <p class="actions"><button value="off" class="btn" data-i18n="dayTurnOff"></button><button value="day" class="btn primary" data-i18n="dayHideDay"></button></p>
+      <p class="small muted" data-i18n="dayAskNote"></p></div>
+  </form>
+</dialog>
+
+<dialog id="quote-dlg" class="sheet" aria-labelledby="quote-h">
+  <form method="dialog">
+    <div class="sheet-head"><h2 id="quote-h" data-i18n="quoteCheck"></h2>
+      <button value="close" class="icon-btn" data-i18n-title="close" aria-label="Ёпиш"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <div class="sheet-body"><p class="small muted" data-i18n="quoteHint"></p>
+      <textarea id="quote-in" class="quote-in" dir="auto" rows="4" aria-labelledby="quote-h"></textarea>
+      <p class="actions"><button type="button" id="quote-run" class="btn primary" data-i18n="quoteRun"></button><button type="button" id="quote-doc" class="btn" data-i18n="quoteFromDoc" hidden></button></p>
+      <div id="quote-out" class="quote-out" aria-live="polite"></div></div>
+  </form>
+</dialog>
+
+<div id="toast" role="status"></div>
+<script src="app.js?v=23"></script>
+</body>
+</html>

@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Word add-in Ҳадислар (Hadislar). The task pane is the website (web/), served from
+     https://hadis.abdulloh.org/ (Hetzner, updated from the main branch). -->
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+           xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides"
+           xsi:type="TaskPaneApp">
+  <Id>044de12a-604e-4a28-aa7c-acb3b787f180</Id>
+  <Version>1.3.1.0</Version>
+  <ProviderName>Abdulloh Hamidulloh al-Madiyniy</ProviderName>
+  <DefaultLocale>uz-Cyrl-UZ</DefaultLocale>
+  <DisplayName DefaultValue="Ҳадислар">
+    <Override Locale="uz-Latn-UZ" Value="Hadislar"/>
+  </DisplayName>
+  <Description DefaultValue="Ҳадисларни қидиринг ва ҳужжатга қўйинг: ҳаракатли арабча матн, ўзбекча таржима ва тахриж (китоб, рақам, муаллиф баҳоси).">
+    <Override Locale="uz-Latn-UZ" Value="Hadislarni qidiring va hujjatga qoʻying: harakatli arabcha matn, oʻzbekcha tarjima va takhrij (kitob, raqam, muallif bahosi)."/>
+  </Description>
+  <IconUrl DefaultValue="https://hadis.abdulloh.org/assets/brand/word-office/square-32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://hadis.abdulloh.org/assets/brand/word-office/square-64.png"/>
+  <SupportUrl DefaultValue="https://hadis.abdulloh.org/help.html"/>
+  <AppDomains>
+    <AppDomain>https://hadis.abdulloh.org</AppDomain>
+  </AppDomains>
+  <Hosts>
+    <Host Name="Document"/>
+  </Hosts>
+  <Requirements>
+    <Sets DefaultMinVersion="1.3">
+      <Set Name="WordApi" MinVersion="1.3"/>
+    </Sets>
+  </Requirements>
+  <DefaultSettings>
+    <SourceLocation DefaultValue="https://hadis.abdulloh.org/index.html"/>
+  </DefaultSettings>
+  <Permissions>ReadWriteDocument</Permissions>
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <Hosts>
+      <Host xsi:type="Document">
+        <DesktopFormFactor>
+          <GetStarted>
+            <Title resid="GetStarted.Title"/>
+            <Description resid="GetStarted.Description"/>
+            <LearnMoreUrl resid="Repo.Url"/>
+          </GetStarted>
+          <FunctionFile resid="Commands.Url"/>
+          <ExtensionPoint xsi:type="PrimaryCommandSurface">
+            <!-- a button on the Home tab, as before -->
+            <OfficeTab id="TabHome">
+              <Group id="HadisUz.Group">
+                <Label resid="Group.Label"/>
+                <Icon>
+                  <bt:Image size="16" resid="Panel.16"/>
+                  <bt:Image size="20" resid="Panel.20"/>
+                  <bt:Image size="24" resid="Panel.24"/>
+                  <bt:Image size="32" resid="Panel.32"/>
+                  <bt:Image size="40" resid="Panel.40"/>
+                  <bt:Image size="48" resid="Panel.48"/>
+                  <bt:Image size="64" resid="Panel.64"/>
+                  <bt:Image size="80" resid="Panel.80"/>
+                </Icon>
+                  <Control xsi:type="Button" id="HadisUz.Open">
+                    <Label resid="Button.Label"/>
+                    <Supertip>
+                      <Title resid="Button.Label"/>
+                      <Description resid="Button.Tooltip"/>
+                    </Supertip>
+                    <Icon>
+                      <bt:Image size="16" resid="Panel.16"/>
+                      <bt:Image size="20" resid="Panel.20"/>
+                      <bt:Image size="24" resid="Panel.24"/>
+                      <bt:Image size="32" resid="Panel.32"/>
+                      <bt:Image size="40" resid="Panel.40"/>
+                      <bt:Image size="48" resid="Panel.48"/>
+                      <bt:Image size="64" resid="Panel.64"/>
+                      <bt:Image size="80" resid="Panel.80"/>
+                    </Icon>
+                    <Action xsi:type="ShowTaskpane">
+                      <TaskpaneId>HadisUzPane</TaskpaneId>
+                      <SourceLocation resid="Taskpane.Url"/>
+                    </Action>
+                  </Control>
+              </Group>
+            </OfficeTab>
+            <!-- its own tab: panel, settings, help, what's new (Fluent UI System Icons, MIT) -->
+            <CustomTab id="HadisUz.Tab">
+              <Group id="HadisUz.TabMain">
+                <Label resid="Group.Label"/>
+                <Icon>
+                  <bt:Image size="16" resid="Panel.16"/>
+                  <bt:Image size="20" resid="Panel.20"/>
+                  <bt:Image size="24" resid="Panel.24"/>
+                  <bt:Image size="32" resid="Panel.32"/>
+                  <bt:Image size="40" resid="Panel.40"/>
+                  <bt:Image size="48" resid="Panel.48"/>
+                  <bt:Image size="64" resid="Panel.64"/>
+                  <bt:Image size="80" resid="Panel.80"/>
+                </Icon>
+                  <Control xsi:type="Button" id="HadisUz.TabOpen">
+                    <Label resid="Tab.Panel"/>
+                    <Supertip>
+                      <Title resid="Tab.Panel"/>
+                      <Description resid="Button.Tooltip"/>
+                    </Supertip>
+                    <Icon>
+                      <bt:Image size="16" resid="Panel.16"/>
+                      <bt:Image size="20" resid="Panel.20"/>
+                      <bt:Image size="24" resid="Panel.24"/>
+                      <bt:Image size="32" resid="Panel.32"/>
+                      <bt:Image size="40" resid="Panel.40"/>
+                      <bt:Image size="48" resid="Panel.48"/>
+                      <bt:Image size="64" resid="Panel.64"/>
+                      <bt:Image size="80" resid="Panel.80"/>
+                    </Icon>
+                    <Action xsi:type="ShowTaskpane">
+                      <TaskpaneId>HadisUzPane</TaskpaneId>
+                      <SourceLocation resid="Taskpane.Url"/>
+                    </Action>
+                  </Control>
+                  <Control xsi:type="Button" id="HadisUz.TabSettings">
+                    <Label resid="Tab.Settings"/>
+                    <Supertip>
+                      <Title resid="Tab.Settings"/>
+                      <Description resid="Tab.Settings.Tip"/>
+                    </Supertip>
+                    <Icon>
+                      <bt:Image size="16" resid="Settings.16"/>
+                      <bt:Image size="20" resid="Settings.20"/>
+                      <bt:Image size="24" resid="Settings.24"/>
+                      <bt:Image size="32" resid="Settings.32"/>
+                      <bt:Image size="40" resid="Settings.40"/>
+                      <bt:Image size="48" resid="Settings.48"/>
+                      <bt:Image size="64" resid="Settings.64"/>
+                      <bt:Image size="80" resid="Settings.80"/>
+                    </Icon>
+                    <Action xsi:type="ShowTaskpane">
+                      <TaskpaneId>HadisUzPane</TaskpaneId>
+                      <SourceLocation resid="Settings.Url"/>
+                    </Action>
+                  </Control>
+              </Group>
+              <Group id="HadisUz.TabInfo">
+                <Label resid="Group.Info"/>
+                <Icon>
+                  <bt:Image size="16" resid="Help.16"/>
+                  <bt:Image size="20" resid="Help.20"/>
+                  <bt:Image size="24" resid="Help.24"/>
+                  <bt:Image size="32" resid="Help.32"/>
+                  <bt:Image size="40" resid="Help.40"/>
+                  <bt:Image size="48" resid="Help.48"/>
+                  <bt:Image size="64" resid="Help.64"/>
+                  <bt:Image size="80" resid="Help.80"/>
+                </Icon>
+                  <Control xsi:type="Button" id="HadisUz.TabHelp">
+                    <Label resid="Tab.Help"/>
+                    <Supertip>
+                      <Title resid="Tab.Help"/>
+                      <Description resid="Tab.Help.Tip"/>
+                    </Supertip>
+                    <Icon>
+                      <bt:Image size="16" resid="Help.16"/>
+                      <bt:Image size="20" resid="Help.20"/>
+                      <bt:Image size="24" resid="Help.24"/>
+                      <bt:Image size="32" resid="Help.32"/>
+                      <bt:Image size="40" resid="Help.40"/>
+                      <bt:Image size="48" resid="Help.48"/>
+                      <bt:Image size="64" resid="Help.64"/>
+                      <bt:Image size="80" resid="Help.80"/>
+                    </Icon>
+                    <Action xsi:type="ExecuteFunction">
+                      <FunctionName>openHelp</FunctionName>
+                    </Action>
+                  </Control>
+                  <Control xsi:type="Button" id="HadisUz.TabNews">
+                    <Label resid="Tab.News"/>
+                    <Supertip>
+                      <Title resid="Tab.News"/>
+                      <Description resid="Tab.News.Tip"/>
+                    </Supertip>
+                    <Icon>
+                      <bt:Image size="16" resid="News.16"/>
+                      <bt:Image size="20" resid="News.20"/>
+                      <bt:Image size="24" resid="News.24"/>
+                      <bt:Image size="32" resid="News.32"/>
+                      <bt:Image size="40" resid="News.40"/>
+                      <bt:Image size="48" resid="News.48"/>
+                      <bt:Image size="64" resid="News.64"/>
+                      <bt:Image size="80" resid="News.80"/>
+                    </Icon>
+                    <Action xsi:type="ExecuteFunction">
+                      <FunctionName>openNews</FunctionName>
+                    </Action>
+                  </Control>
+              </Group>
+              <Label resid="Group.Label"/>
+            </CustomTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+    <Resources>
+      <bt:Images>
+        <bt:Image id="Panel.16" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/panel-16.png"/>
+        <bt:Image id="Panel.20" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/panel-20.png"/>
+        <bt:Image id="Panel.24" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/panel-24.png"/>
+        <bt:Image id="Panel.32" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/panel-32.png"/>
+        <bt:Image id="Panel.40" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/panel-40.png"/>
+        <bt:Image id="Panel.48" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/panel-48.png"/>
+        <bt:Image id="Panel.64" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/panel-64.png"/>
+        <bt:Image id="Panel.80" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/panel-80.png"/>
+        <bt:Image id="Settings.16" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/settings-16.png"/>
+        <bt:Image id="Settings.20" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/settings-20.png"/>
+        <bt:Image id="Settings.24" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/settings-24.png"/>
+        <bt:Image id="Settings.32" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/settings-32.png"/>
+        <bt:Image id="Settings.40" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/settings-40.png"/>
+        <bt:Image id="Settings.48" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/settings-48.png"/>
+        <bt:Image id="Settings.64" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/settings-64.png"/>
+        <bt:Image id="Settings.80" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/settings-80.png"/>
+        <bt:Image id="Help.16" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/help-16.png"/>
+        <bt:Image id="Help.20" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/help-20.png"/>
+        <bt:Image id="Help.24" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/help-24.png"/>
+        <bt:Image id="Help.32" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/help-32.png"/>
+        <bt:Image id="Help.40" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/help-40.png"/>
+        <bt:Image id="Help.48" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/help-48.png"/>
+        <bt:Image id="Help.64" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/help-64.png"/>
+        <bt:Image id="Help.80" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/help-80.png"/>
+        <bt:Image id="News.16" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/news-16.png"/>
+        <bt:Image id="News.20" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/news-20.png"/>
+        <bt:Image id="News.24" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/news-24.png"/>
+        <bt:Image id="News.32" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/news-32.png"/>
+        <bt:Image id="News.40" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/news-40.png"/>
+        <bt:Image id="News.48" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/news-48.png"/>
+        <bt:Image id="News.64" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/news-64.png"/>
+        <bt:Image id="News.80" DefaultValue="https://hadis.abdulloh.org/assets/ribbon/news-80.png"/>
+      </bt:Images>
+      <bt:Urls>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://hadis.abdulloh.org/index.html"/>
+        <bt:Url id="Settings.Url" DefaultValue="https://hadis.abdulloh.org/index.html#settings"/>
+        <bt:Url id="Commands.Url" DefaultValue="https://hadis.abdulloh.org/commands.html"/>
+        <bt:Url id="Repo.Url" DefaultValue="https://hadis.abdulloh.org/help.html"/>
+      </bt:Urls>
+      <bt:ShortStrings>
+        <bt:String id="GetStarted.Title" DefaultValue="Ҳадислар: Word'да ҳадислар">
+          <bt:Override Locale="uz-Latn-UZ" Value="Hadislar: Word'da hadislar"/>
+        </bt:String>
+        <bt:String id="Group.Label" DefaultValue="Ҳадислар">
+          <bt:Override Locale="uz-Latn-UZ" Value="Hadislar"/>
+        </bt:String>
+        <bt:String id="Button.Label" DefaultValue="Ҳадислар">
+          <bt:Override Locale="uz-Latn-UZ" Value="Hadislar"/>
+        </bt:String>
+        <bt:String id="Tab.Panel" DefaultValue="Ҳадислар">
+          <bt:Override Locale="uz-Latn-UZ" Value="Hadislar"/>
+        </bt:String>
+        <bt:String id="Tab.Settings" DefaultValue="Созламалар">
+          <bt:Override Locale="uz-Latn-UZ" Value="Sozlamalar"/>
+        </bt:String>
+        <bt:String id="Tab.Help" DefaultValue="Ёрдам">
+          <bt:Override Locale="uz-Latn-UZ" Value="Yordam"/>
+        </bt:String>
+        <bt:String id="Tab.News" DefaultValue="Янгиликлар">
+          <bt:Override Locale="uz-Latn-UZ" Value="Yangiliklar"/>
+        </bt:String>
+        <bt:String id="Group.Info" DefaultValue="Маълумот">
+          <bt:Override Locale="uz-Latn-UZ" Value="Maʼlumot"/>
+        </bt:String>
+      </bt:ShortStrings>
+      <bt:LongStrings>
+        <bt:String id="GetStarted.Description" DefaultValue="Ҳадисни қидириш ва таржимаси билан қўйиш учун «Главная / Home» бўлимидаги Ҳадислар тугмасини босинг.">
+          <bt:Override Locale="uz-Latn-UZ" Value="Hadisni qidirish va tarjimasi bilan qoʻyish uchun «Bosh sahifa / Home» boʻlimidagi Hadislar tugmasini bosing."/>
+        </bt:String>
+        <bt:String id="Button.Tooltip" DefaultValue="Ҳадис қидириш ва уни таржимаси ва тахриж билан қўйиш">
+          <bt:Override Locale="uz-Latn-UZ" Value="Hadis qidirish va uni tarjimasi va takhrij bilan qoʻyish"/>
+        </bt:String>
+        <bt:String id="Tab.Settings.Tip" DefaultValue="Нима қўйилади ва унинг кўриниши: санад, матн, тахриж, имло">
+          <bt:Override Locale="uz-Latn-UZ" Value="Nima qoʻyiladi va uning koʻrinishi: sanad, matn, takhrij, imlo"/>
+        </bt:String>
+        <bt:String id="Tab.Help.Tip" DefaultValue="«Ҳадислар»дан фойдаланиш, саволлар ва жавоблар">
+          <bt:Override Locale="uz-Latn-UZ" Value="«Hadislar»dan foydalanish, savollar va javoblar"/>
+        </bt:String>
+        <bt:String id="Tab.News.Tip" DefaultValue="Ҳар бир версияда нима ўзгарди">
+          <bt:Override Locale="uz-Latn-UZ" Value="Har bir versiyada nima oʻzgardi"/>
+        </bt:String>
+      </bt:LongStrings>
+    </Resources>
+  </VersionOverrides>
+</OfficeApp>

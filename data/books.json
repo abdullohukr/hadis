@@ -1,0 +1,372 @@
+{
+ "version": "29fba5249d",
+ "docs": 89215,
+ "block": 100,
+ "books": [
+  {
+   "id": "bukhari",
+   "key": "Бухорий",
+   "name": {
+    "uz": "Саҳиҳул Бухорий",
+    "uzl": "Sahihul Buxoriy",
+    "ar": "صحيح البخاري"
+   },
+   "author": {
+    "uz": "Имом Бухорий",
+    "uzl": "Imom Buxoriy",
+    "ar": "البخاري"
+   },
+   "edition": {
+    "title_ar": "صحيح البخاري",
+    "author_ar": "أبو عبد الله، محمد بن إسماعيل بن إبراهيم بن المغيرة ابن بردزبه البخاري الجعفي",
+    "editor_ar": "جماعة من العلماء",
+    "publisher_ar": "دار طوق النجاة - بيروت (مصورة عن الطبعة السلطانية، بولاق ١٣١١ هـ؛ ترقيم محمد فؤاد عبد الباقي)",
+    "edition_ar": "الأولى، ١٤٢٢ هـ",
+    "volumes": 9,
+    "numbering": "printed edition (Muhammad Fuʼad ʿAbd al-Baqi)"
+   },
+   "count": 7563,
+   "doc": [
+    0,
+    7562
+   ],
+   "numbers": [
+    1,
+    7563
+   ],
+   "blocks": 76,
+   "label": "Саҳиҳ"
+  },
+  {
+   "id": "muslim",
+   "key": "Муслим",
+   "name": {
+    "uz": "Саҳиҳи Муслим",
+    "uzl": "Sahihi Muslim",
+    "ar": "صحيح مسلم"
+   },
+   "author": {
+    "uz": "Имом Муслим",
+    "uzl": "Imom Muslim",
+    "ar": "مسلم"
+   },
+   "edition": {
+    "title_ar": "الجامع الصحيح «صحيح مسلم»",
+    "author_ar": "أبو الحسين مسلم بن الحجاج بن مسلم القشيري النيسابوري",
+    "editor_ar": "محمد ذهني أفندي - إسماعيل بن عبد الحميد الحافظ الطرابلسي - أحمد رفعت بن عثمان حلمي القره حصاري - محمد عزت بن عثمان الزعفرانبوليوي - أبو نعمة الله محمد شكري بن حسن الأنقروي",
+    "publisher_ar": "دار الطباعة العامرة - تركيا ١٣٣٤ هـ (مصورة: دار طوق النجاة - بيروت؛ ترقيم محمد فؤاد عبد الباقي)",
+    "edition_ar": "الأولى، ١٤٣٣ هـ",
+    "volumes": 8,
+    "numbering": "printed edition (Muhammad Fuʼad ʿAbd al-Baqi)"
+   },
+   "count": 7636,
+   "doc": [
+    7563,
+    15198
+   ],
+   "numbers": [
+    1,
+    3033
+   ],
+   "blocks": 77,
+   "label": "Саҳиҳ"
+  },
+  {
+   "id": "abudawud",
+   "key": "Абу Довуд",
+   "name": {
+    "uz": "Сунани Абу Довуд",
+    "uzl": "Sunani Abu Dovud",
+    "ar": "سنن أبي داود"
+   },
+   "author": {
+    "uz": "Абу Довуд",
+    "uzl": "Abu Dovud",
+    "ar": "أبو داود"
+   },
+   "edition": {
+    "title_ar": "سنن أبي داود",
+    "author_ar": "أبو داود سليمان بن الأشعث بن إسحاق بن بشير بن شداد بن عمرو الأزدي السِّجِسْتاني (ت ٢٧٥ هـ)",
+    "editor_ar": "محمد محيي الدين عبد الحميد",
+    "publisher_ar": "المكتبة العصرية، صيدا - بيروت",
+    "edition_ar": null,
+    "volumes": 4,
+    "numbering": "printed edition"
+   },
+   "count": 5274,
+   "doc": [
+    15199,
+    20472
+   ],
+   "numbers": [
+    1,
+    5274
+   ],
+   "blocks": 53
+  },
+  {
+   "id": "tirmidhi",
+   "key": "Термизий",
+   "name": {
+    "uz": "Сунани Термизий",
+    "uzl": "Sunani Termiziy",
+    "ar": "سنن الترمذي"
+   },
+   "author": {
+    "uz": "Имом Термизий",
+    "uzl": "Imom Termiziy",
+    "ar": "الترمذي"
+   },
+   "edition": {
+    "title_ar": "الجامع الكبير (سنن الترمذي)",
+    "author_ar": "أبو عيسى محمد بن عيسى الترمذي (ت ٢٧٩ هـ)",
+    "editor_ar": "بشار عواد معروف",
+    "publisher_ar": "دار الغرب الإسلامي - بيروت",
+    "edition_ar": "الأولى، ١٩٩٦ م",
+    "volumes": 6,
+    "numbering": "printed edition"
+   },
+   "count": 3948,
+   "doc": [
+    20473,
+    24420
+   ],
+   "numbers": [
+    1,
+    3956
+   ],
+   "blocks": 40
+  },
+  {
+   "id": "ibnmajah",
+   "key": "Ибн Можа",
+   "name": {
+    "uz": "Сунани Ибн Можа",
+    "uzl": "Sunani Ibn Moja",
+    "ar": "سنن ابن ماجه"
+   },
+   "author": {
+    "uz": "Ибн Можа",
+    "uzl": "Ibn Moja",
+    "ar": "ابن ماجه"
+   },
+   "edition": {
+    "title_ar": "سنن ابن ماجه",
+    "author_ar": "ابن ماجة أبو عبد الله محمد بن يزيد القزويني (ت ٢٧٣ هـ)",
+    "editor_ar": "محمد فؤاد عبد الباقي",
+    "publisher_ar": "دار إحياء الكتب العربية - فيصل عيسى البابي الحلبي",
+    "edition_ar": null,
+    "volumes": 2,
+    "numbering": "printed edition (continuous)"
+   },
+   "count": 4341,
+   "doc": [
+    24421,
+    28761
+   ],
+   "numbers": [
+    1,
+    4341
+   ],
+   "blocks": 44
+  },
+  {
+   "id": "nasai",
+   "key": "Насоий",
+   "name": {
+    "uz": "Сунани Насоий",
+    "uzl": "Sunani Nasoiy",
+    "ar": "سنن النسائي"
+   },
+   "author": {
+    "uz": "Имом Насоий",
+    "uzl": "Imom Nasoiy",
+    "ar": "النسائي"
+   },
+   "edition": {
+    "title_ar": "سنن النسائي (بشرح السيوطي وحاشية السندي)",
+    "author_ar": "أبو عبد الرحمن أحمد بن شعيب النسائي",
+    "editor_ar": "جماعة، وقرئت على الشيخ حسن محمد المسعودي",
+    "publisher_ar": "المكتبة التجارية الكبرى بالقاهرة",
+    "edition_ar": "الأولى، ١٣٤٨ هـ - ١٩٣٠ م",
+    "volumes": 8,
+    "numbering": "books/chapters/hadiths numbered by ʿAbd al-Fattah Abu Ghudda (Maktab al-Matbuʿat al-Islamiyya, Aleppo, 2nd ed. 1406 H / 1986)"
+   },
+   "count": 5862,
+   "doc": [
+    28762,
+    34623
+   ],
+   "numbers": [
+    1,
+    5758
+   ],
+   "blocks": 59
+  },
+  {
+   "id": "ahmad",
+   "key": "Аҳмад",
+   "name": {
+    "uz": "Муснади Аҳмад",
+    "uzl": "Musnadi Ahmad",
+    "ar": "مسند أحمد"
+   },
+   "author": {
+    "uz": "Имом Аҳмад",
+    "uzl": "Imom Ahmad",
+    "ar": "أحمد بن حنبل"
+   },
+   "edition": {
+    "title_ar": "مسند الإمام أحمد بن حنبل",
+    "author_ar": "الإمام أحمد بن حنبل (١٦٤ - ٢٤١ هـ)",
+    "editor_ar": "شعيب الأرنؤوط - عادل مرشد - وآخرون، إشراف: عبد الله بن عبد المحسن التركي",
+    "publisher_ar": "مؤسسة الرسالة",
+    "edition_ar": "الأولى، ١٤٢١ هـ - ٢٠٠١ م",
+    "volumes": 50,
+    "numbering": "printed edition"
+   },
+   "count": 27309,
+   "doc": [
+    34624,
+    61932
+   ],
+   "numbers": [
+    1,
+    27647
+   ],
+   "blocks": 274
+  },
+  {
+   "id": "hakim",
+   "key": "Ҳоким",
+   "name": {
+    "uz": "Мустадрак",
+    "uzl": "Mustadrak",
+    "ar": "المستدرك على الصحيحين"
+   },
+   "author": {
+    "uz": "Ҳоким",
+    "uzl": "Hokim",
+    "ar": "الحاكم"
+   },
+   "edition": {
+    "title_ar": "المستدرك على الصحيحين",
+    "author_ar": "أبو عبد الله محمد بن عبد الله الحاكم النيسابوري",
+    "editor_ar": "مصطفى عبد القادر عطا",
+    "publisher_ar": "دار الكتب العلمية - بيروت",
+    "edition_ar": "الأولى، ١٤١١ - ١٩٩٠",
+    "volumes": 4,
+    "numbering": null
+   },
+   "count": 8577,
+   "doc": [
+    61933,
+    70509
+   ],
+   "numbers": [
+    1,
+    8803
+   ],
+   "blocks": 86
+  },
+  {
+   "id": "bayhaqi",
+   "key": "Байҳақий",
+   "name": {
+    "uz": "Сунанус-Сағир",
+    "uzl": "Sunanus-Sagʻir",
+    "ar": "السنن الصغير"
+   },
+   "author": {
+    "uz": "Байҳақий",
+    "uzl": "Bayhaqiy",
+    "ar": "البيهقي"
+   },
+   "edition": {
+    "title_ar": "السنن الصغير للبيهقي",
+    "author_ar": "أحمد بن الحسين بن علي بن موسى الخُسْرَوْجِردي الخراساني، أبو بكر البيهقي (ت ٤٥٨هـ)",
+    "editor_ar": "عبد المعطي أمين قلعجي",
+    "publisher_ar": "جامعة الدراسات الإسلامية، كراتشي ـ باكستان",
+    "edition_ar": "الأولى، ١٤١٠هـ - ١٩٨٩م",
+    "volumes": 4,
+    "numbering": "printed edition"
+   },
+   "count": 4378,
+   "doc": [
+    70510,
+    74887
+   ],
+   "numbers": [
+    1,
+    3503
+   ],
+   "blocks": 44
+  },
+  {
+   "id": "tabarani",
+   "key": "Табароний",
+   "name": {
+    "uz": "Муъжамул Авсат",
+    "uzl": "Muʿjamul Avsat",
+    "ar": "المعجم الأوسط"
+   },
+   "author": {
+    "uz": "Табароний",
+    "uzl": "Tabaroniy",
+    "ar": "الطبراني"
+   },
+   "edition": {
+    "title_ar": "المعجم الأوسط",
+    "author_ar": "أبو القاسم سليمان بن أحمد الطبراني (٢٦٠ - ٣٦٠ هـ)",
+    "editor_ar": "أبو معاذ طارق بن عوض الله بن محمد - أبو الفضل عبد المحسن بن إبراهيم الحسيني",
+    "publisher_ar": "دار الحرمين - القاهرة",
+    "edition_ar": "١٤١٥ هـ - ١٩٩٥ م",
+    "volumes": 10,
+    "numbering": "printed edition"
+   },
+   "count": 9479,
+   "doc": [
+    74888,
+    84366
+   ],
+   "numbers": [
+    1,
+    9489
+   ],
+   "blocks": 95
+  },
+  {
+   "id": "daraqutni",
+   "key": "Дорақутний",
+   "name": {
+    "uz": "Сунани Дорақутний",
+    "uzl": "Sunani Doraqutniy",
+    "ar": "سنن الدارقطني"
+   },
+   "author": {
+    "uz": "Дорақутний",
+    "uzl": "Doraqutniy",
+    "ar": "الدارقطني"
+   },
+   "edition": {
+    "title_ar": "سنن الدارقطني",
+    "author_ar": "أبو الحسن علي بن عمر بن أحمد بن مهدي بن مسعود بن النعمان بن دينار البغدادي الدارقطني (ت ٣٨٥هـ)",
+    "editor_ar": "شعيب الارنؤوط، حسن عبد المنعم شلبي، عبد اللطيف حرز الله، أحمد برهوم",
+    "publisher_ar": "مؤسسة الرسالة، بيروت - لبنان",
+    "edition_ar": "الأولى، ١٤٢٤ هـ - ٢٠٠٤ م",
+    "volumes": 5,
+    "numbering": "printed edition"
+   },
+   "count": 4848,
+   "doc": [
+    84367,
+    89214
+   ],
+   "numbers": [
+    1,
+    4836
+   ],
+   "blocks": 49
+  }
+ ]
+}

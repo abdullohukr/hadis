@@ -1,0 +1,11 @@
+# Ҳадислар қўшимчасини Windows'дан олиб ташлаш (шрифтга тегмайди).
+#   irm https://hadis.abdulloh.org/win-uninstall.txt | iex
+$Home2 = Join-Path $env:LOCALAPPDATA 'HadisUz'
+$M = Join-Path $Home2 'manifest.xml'
+if (Test-Path $M) {
+  try { $Id = ([xml](Get-Content $M -Raw)).OfficeApp.Id; $k = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey('Software\Microsoft\Office\16.0\WEF\Developer', $true); if ($k) { $k.DeleteValue($Id, $false); $k.Close() } } catch {}
+  Add-Type -AssemblyName Microsoft.VisualBasic
+  [Microsoft.VisualBasic.FileIO.FileSystem]::DeleteFile($M, 'OnlyErrorDialogs', 'SendToRecycleBin')
+  Write-Host '✓ олиб ташланди (Корзинага)'
+} else { Write-Host 'Қўшимча ўрнатилмаган.' }
+Write-Host 'Word-ни ёпиб қайта очинг.'

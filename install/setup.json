@@ -1,0 +1,14 @@
+{
+ "version": "1.2.0",
+ "built": "2026-11-02",
+ "files": {
+  "Hadislar-Install-Windows.bat": 551,
+  "Hadislar-Repair-Windows.bat": 608,
+  "Hadislar-Setup-Mac.dmg": 6728261,
+  "Hadislar-Setup-Offline-Mac.dmg": 7823562,
+  "Hadislar-Setup-Offline-Windows.exe": 9368064,
+  "Hadislar-Setup-Windows.exe": 8393216,
+  "Hadislar-Uninstall-Mac.command": 615,
+  "Hadislar-Uninstall-Windows.bat": 581
+ }
+}

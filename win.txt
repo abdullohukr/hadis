@@ -1,0 +1,48 @@
+# Ҳадислар — Word учун қўшимчани Windows'га ўрнатиш (администратор ҳуқуқи керак эмас).
+# PowerShell'да:   irm https://hadis.abdulloh.org/win.txt | iex
+# Ўчириш:          irm https://hadis.abdulloh.org/win-uninstall.txt | iex
+# Тузатиш (тоза ўрнатиш, Word'да ишламаса/қотса):  irm https://hadis.abdulloh.org/win-clean.txt | iex
+# Офлайн/синов:    $env:HADIS_SRC='C:\papka'  (ичида manifest.xml ва ихтиёрий ScheherazadeNew-*.ttf)
+# Нима қилади: (1) manifest.xml'ни %LOCALAPPDATA%\HadisUz'га қўяди ва Word'га (HKCU ... \WEF\Developer) уланади,
+# (2) "Scheherazade New" шрифти йўқ бўлса фойдаланувчи учун ўрнатади (OFL). Word'ни ёпиб қайта очинг.
+$ErrorActionPreference = 'Stop'
+[Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
+$Site   = if ($env:HADIS_SITE) { $env:HADIS_SITE } else { 'https://hadis.abdulloh.org' }
+$Mirror = 'https://abdullohukr.github.io/hadis'
+$Src    = [string]$env:HADIS_SRC
+$Home2  = Join-Path $env:LOCALAPPDATA 'HadisUz'
+$FontDir = Join-Path $Home2 'Fonts'
+New-Item -ItemType Directory -Force -Path $Home2, $FontDir | Out-Null
+if (Get-Process WINWORD -ErrorAction SilentlyContinue) { Write-Host 'Диққат: Word очиқ. Ўрнатгандан кейин уни ёпиб, қайта очинг.' }
+
+function Get-File($name, $out) {
+  if ($Src -and (Test-Path (Join-Path $Src $name))) { Copy-Item -Force (Join-Path $Src $name) $out; return }
+  if ($Src -and (Test-Path (Join-Path $Src (Split-Path $name -Leaf)))) { Copy-Item -Force (Join-Path $Src (Split-Path $name -Leaf)) $out; return }
+  try { Invoke-WebRequest -UseBasicParsing "$Site/$name" -OutFile $out } catch { Invoke-WebRequest -UseBasicParsing "$Mirror/$name" -OutFile $out }
+}
+
+# 1) қўшимча манифести
+$Manifest = Join-Path $Home2 'manifest.xml'
+Get-File 'manifest.xml' $Manifest
+$xml = [xml](Get-Content $Manifest -Raw)
+if (-not $xml.OfficeApp) { throw 'manifest.xml яроқсиз' }
+$Id = $xml.OfficeApp.Id
+$Dev = [Microsoft.Win32.Registry]::CurrentUser.CreateSubKey('Software\Microsoft\Office\16.0\WEF\Developer')
+$Dev.SetValue($Id, $Manifest); $Dev.Close()
+Write-Host "✓ Word қўшимчаси: $Manifest"
+
+# 2) шрифт (фақат жорий фойдаланувчи учун)
+$FontKeyPath = 'Software\Microsoft\Windows NT\CurrentVersion\Fonts'
+$FontKey = [Microsoft.Win32.Registry]::CurrentUser.CreateSubKey($FontKeyPath)
+$have = $FontKey.GetValueNames() | Where-Object { $_ -like 'Scheherazade New*' }
+if ($have) { Write-Host '✓ Scheherazade New шрифти аллақачон бор' }
+else {
+  foreach ($pair in @(@('ScheherazadeNew-Regular.ttf', 'Scheherazade New (TrueType)'), @('ScheherazadeNew-Bold.ttf', 'Scheherazade New Bold (TrueType)'))) {
+    $dst = Join-Path $FontDir $pair[0]
+    try { Get-File ('fonts/' + $pair[0]) $dst; $FontKey.SetValue($pair[1], $dst) } catch { Write-Host ('! ' + $pair[0] + ' юкланмади') }
+  }
+  Write-Host '✓ Scheherazade New шрифти ўрнатилди (Word қайта очилгандан кейин кўринади)'
+}
+$FontKey.Close()
+Write-Host ''
+Write-Host 'Тайёр. Word-ни ёпиб қайта очинг. Лентада «Ҳадислар» ойнаси чиқади.'

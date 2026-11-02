@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<title>Ҳадислар — Word commands</title>
+<script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+<script>
+  /* The FunctionFile of addin/manifest.xml: the ribbon buttons «Ёрдам» (openHelp) and «Янгиликлар» (openNews) open the
+     page in the browser (as the ? of the panel; a dialog inside Word where the browser cannot be opened). The alphabet of
+     the page: the one of the panel (hadis-settings.script: new | cyrl | latn -> ?lang=uz_new | uz | uz_latn, web/legal.js). */
+  function lang() {
+    var s = '';
+    try { s = (JSON.parse(localStorage.getItem('hadis-settings') || '{}') || {}).script || ''; } catch (e) { s = ''; }
+    return { 'new': 'uz_new', latn: 'uz_latn', cyrl: 'uz' }[s] || 'uz';
+  }
+  function openPage(page, event) {
+    var url = new URL(page + '?lang=' + lang() + '&v=' + Date.now(), location.href).href;
+    try {
+      if (Office.context.ui.openBrowserWindow) { Office.context.ui.openBrowserWindow(url); event.completed(); return; }
+    } catch (e) {}
+    Office.context.ui.displayDialogAsync(url, { height: 80, width: 60 }, function () { event.completed(); });
+  }
+  function openHelp(event) { openPage('help.html', event); }
+  function openNews(event) { openPage('releases.html', event); }
+  if (window.Office) Office.onReady(function () {
+    if (Office.actions && Office.actions.associate) { Office.actions.associate('openHelp', openHelp); Office.actions.associate('openNews', openNews); }
+  });
+</script>
+</head>
+<body></body>
+</html>

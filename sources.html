@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<title>Ҳадислар — Манбалар</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="hadis-version" content="23">
+<link rel="icon" href="assets/brand/favicon.svg?v=1" type="image/svg+xml">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131210" media="(prefers-color-scheme: dark)">
+<script>
+  try { var t = (JSON.parse(localStorage.getItem('hadis-settings') || '{}').theme) || 'auto';
+        if (/^(light|dark|sepia|contrast)$/.test(t)) document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+</script>
+<link rel="preload" href="fonts/SourceSans3-Uz.woff2?v=1" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/SourceSerif4-Uz.woff2?v=1" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="data/sources.json?v=23" as="fetch" crossorigin>
+<link rel="stylesheet" href="style.css?v=23">
+</head>
+<body class="page-site">
+<header class="site-head"><div class="in">
+  <a class="home" href="./"><img class="logo" src="assets/brand/logo.svg?v=1" width="28" height="28" alt=""><span data-i18n="appName">Ҳадислар</span></a>
+  <nav class="site-nav"><a href="./" data-i18n="sitePanel">Панель</a><a href="install.html" data-i18n="install">Ўрнатиш</a><a href="sources.html" data-i18n="sources" aria-current="page">Манбалар</a><a href="help.html" data-i18n="help">Ёрдам</a><a href="releases.html" data-i18n="whatsNew">Дастур нашри</a></nav>
+  <div id="script" class="seg small-seg" role="group" aria-label="Ёзув / Yozuv" translate="no"><button type="button" data-s="uz_new" lang="uz-Latn">Öz</button><button type="button" data-s="uz" lang="uz-Cyrl">Ўз</button><button type="button" data-s="uz_latn" lang="uz-Latn">Oʼz</button></div>
+</div></header>
+<main class="page">
+  <div class="top">
+    <h1><span class="pre"><span data-l="uz">Ҳадислар</span><span data-l="uz_latn">Hadislar</span></span><span data-l="uz">Манбалар</span><span data-l="uz_latn">Manbalar</span></h1>
+  </div>
+  <p class="lead" id="s-lead"></p>
+  <nav class="toc" id="s-toc"></nav>
+  <div id="s-body" aria-live="polite"></div>
+  <p class="author"><span data-i18n="author">Абдуллоҳ Ҳамидуллоҳ ал-Мадийний</span> · <a href="mailto:hadis@abdulloh.org">hadis@abdulloh.org</a> · <a href="help.html" data-i18n="help">Ёрдам</a> · <a href="sources.html" data-i18n="sources">Манбалар</a> · <a href="install.html" data-i18n="install">Ўрнатиш</a> · <a href="releases.html" data-i18n="whatsNew">Дастур нашри</a> · <a href="privacy.html" data-i18n="privacy">Махфийлик</a> · <a href="terms.html" data-i18n="terms">Шартлар</a></p>
+</main>
+<script src="i18n.js?v=23"></script>
+<script>
+/* «Манбалар»: the books, their printed editions and the Shamela copy the numbers were checked against, the scholars and
+   the works of the gradings. The data: data/sources.json (tools/build_sources.py); the words: web/i18n.js (src…). */
+(function () {
+  'use strict';
+  var D = null, failed = false;
+  function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  function num(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
+  function ar(s) { return '<bdi lang="ar" dir="rtl">' + esc(s) + '</bdi>'; }
+  function ext(url, text) { return '<a href="' + esc(url) + '" target="_blank" rel="noopener" translate="no">' + esc(text) + '</a>'; }
+  function row(dt, dd) { return dd ? '<dt>' + esc(dt) + '</dt><dd>' + dd + '</dd>' : ''; }
+  window.HadisPage = function (l) {
+    var I = new I18n(l), t = function (k, v) { return I.t(k, v); }, L = l === 'uz_latn' ? 'uzl' : 'uz';
+    document.getElementById('s-lead').textContent = t('srcLead');
+    var body = document.getElementById('s-body'), toc = document.getElementById('s-toc');
+    if (!D) { body.innerHTML = failed ? '<p class="warn-line">' + esc(t('srcLoadFail')) + '</p>' : ''; toc.innerHTML = ''; return; }
+    var works = {}; D.works.forEach(function (w) { works[w.id] = w; });
+    var names = {}; D.books.forEach(function (b) { names[b.id] = b.name[L]; });
+    toc.innerHTML = D.books.map(function (b) { return '<a href="#' + b.id + '">' + esc(b.name[L]) + '</a>'; }).join('') +
+      '<a href="#works">' + esc(t('srcWorksH')) + '</a>';
+    var h = '<h2 class="sr">' + esc(t('srcBooksH')) + '</h2><div class="src-books">' + D.books.map(function (b) {
+      var e = b.edition, sh = b.shamela, n = b.numbering;
+      var grades;
+      if (b.label) grades = '<p class="none">' + esc(t('srcSahih')) + '</p>';
+      else {
+        var g = b.grades.map(function (x) {
+          var w = works[x.work];
+          return '<li><b>' + esc(l === 'uz_latn' ? w.by_l : w.by) + '</b>, «' + esc(w[L]) + '»: ' + num(x.n) + '</li>';
+        });
+        if (b.hukm_own) g.push('<li>' + esc(t('srcOwn', { n: num(b.hukm_own) })) + '</li>');
+        grades = g.length ? '<ul>' + g.join('') + '</ul>' : '';
+        if (!b.grades.length) grades += '<p class="none">' + esc(t('srcNoGrade')) + '</p>';
+      }
+      var checked = n.samples.map(function (s) { return '<a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.n) + ' (' + esc(s.vp) + ')</a>'; }).join(', ');
+      return '<section class="src-book" id="' + b.id + '" aria-labelledby="h-' + b.id + '"><div class="no" aria-hidden="true">' + b.no + '</div><div>' +
+        '<h2 id="h-' + b.id + '">' + esc(b.name[L]) + ' <span class="ar" lang="ar" dir="rtl">' + esc(b.name.ar) + '</span>' + (b.label ? ' <span class="tag">' + esc(l === 'uz_latn' ? 'Sahih' : 'Саҳиҳ') + '</span>' : '') + '</h2>' +
+        '<p class="by">' + esc(b.author[L]) + (b.author_full_ar ? ' · ' + ar(b.author_full_ar) : '') + '</p>' +
+        '<dl>' +
+          row(t('srcTitleAr'), e.title_ar && ar(e.title_ar)) +
+          row(t('srcTahqiq'), e.editor_ar && ar(e.editor_ar)) +
+          row(t('srcPublisher'), e.publisher_ar && ar(e.publisher_ar)) +
+          row(t('srcTabaa'), e.edition_ar && ar(e.edition_ar)) +
+          row(t('srcVolumes'), e.volumes && esc(t('srcVolN', { n: e.volumes }))) +
+          row(t('srcHadiths'), esc(t('srcHadithsN', { count: num(b.count), a: b.numbers[0], b: b.numbers[1] }))) +
+          row(t('srcNumbering'), esc(n[L])) +
+          row(t('srcShamela'), ext(sh.url, 'shamela.ws/book/' + sh.book_id) + (sh.volumes ? ' · ' + esc(t('srcVolN', { n: sh.volumes })) : '') +
+            (sh.title_ar ? '<br>' + ar(sh.title_ar) : '') + (sh.tabaa_ar ? '<br>' + ar(sh.tabaa_ar) : '') + (sh.unchecked ? '<br><span class="small muted">' + esc(t('srcUnchecked')) + '</span>' : '')) +
+          row(t('srcChecked'), checked) +
+          row(t('srcGrade'), grades) +
+        '</dl></div></section>';
+    }).join('') + '</div>';
+    /* the gradings: the scholars, then their works */
+    h += '<h2 class="sec-h" id="works">' + esc(t('srcWorksH')) + '</h2>' +
+      '<p class="lead tight">' + esc(t('srcWorksLead')) + '</p>' +
+      '<div class="scholars">' + D.scholars.map(function (s) {
+        return '<div class="scholar"><b>' + esc(s[L]) + '</b><span class="ar" lang="ar" dir="rtl">' + esc(s.ar) + '</span>' +
+          '<p>' + esc(t('srcDied', { d: s.d })) + ' · ' + esc(t('srcWorksN', { n: s.works.length })) + '</p></div>';
+      }).join('') + '</div>' +
+      '<div class="src-works">' + D.works.map(function (w) {
+        var tj = l === 'uz_latn' ? w.tahrij_uzl : w.tahrij_uz, tz = l === 'uz_latn' ? w.tahrij_uzl_zaif : w.tahrij_uz_zaif;
+        var src = (l === 'uz_latn' ? 'Manba' : 'Манба') + ': «' + tj + '»' + (w.example.ref != null ? ', ' + w.example.ref : '');
+        return '<section class="src-work" id="w-' + w.id + '"><h3>' + esc(w[L]) + '</h3><span class="ar" lang="ar" dir="rtl">' + esc(w.ar) + '</span>' +
+          '<p><b>' + esc(l === 'uz_latn' ? w.by_l : w.by) + '</b> · ' + esc(t('srcForBooks')) + ': ' + w.books.map(function (x) { return '<a href="#' + x.id + '">' + esc(names[x.id]) + '</a> (' + num(x.n) + ')'; }).join(', ') + '</p>' +
+          '<p>' + esc(t('srcLinked', { how: w.how[L] })) + '</p>' +
+          (w.edition ? '<dl>' + row(t('srcEditionOf'), w.edition.title_ar && ar(w.edition.title_ar)) + row(t('srcTahqiq'), w.edition.editor_ar && ar(w.edition.editor_ar)) +
+            row(t('srcPublisher'), w.edition.publisher_ar && ar(w.edition.publisher_ar)) + row(t('srcTabaa'), w.edition.edition_ar && ar(w.edition.edition_ar)) +
+            row(t('srcShamela'), ar(w.edition.shamela_title) + (w.edition.volumes_ar ? ' · ' + ar(w.edition.volumes_ar) : '')) + '</dl>' : '') +
+          '<p>' + (w.set ? esc(t('srcSet')) + ': ' + ext(w.set.url, w.set.name) + ', ' + esc(t('srcLicence')) + ' <span translate="no">' + esc(w.set.licence) + '</span>'
+            : w.shamela ? esc(t(w.shamela === 'text' ? 'srcFromShamelaText' : 'srcFromShamela')) : esc(t('srcFromText'))) +
+            (w.orig ? ' · ' + esc(t('srcOrig')) + ': ' + ext(w.orig, w.orig.replace(/^https?:\/\//, '')) : '') + '</p>' +
+          '<p>' + esc(t('srcInDoc')) + ': <i class="tjs">' + esc(src) + '</i>' + (tz ? ' / <i class="tjs">«' + esc(tz) + '»</i>' : '') + '</p></section>';
+      }).join('') + '</div>' +
+      '<p class="small muted src-foot">' + esc(t('srcFoot', { v: D.data, d: D.shamela_checked })) + '</p>';
+    body.innerHTML = h;
+  };
+  fetch('data/sources.json?v=23').then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (j) {
+    D = j; if (window.HadisPageRedraw) window.HadisPageRedraw();
+    if (location.hash) { var el = document.getElementById(location.hash.slice(1)); if (el) el.scrollIntoView(); }
+  }).catch(function () { failed = true; if (window.HadisPageRedraw) window.HadisPageRedraw(); });
+})();
+</script>
+<script src="text.js?v=23"></script>
+<script src="legal.js?v=23"></script>
+</body>
+</html>
