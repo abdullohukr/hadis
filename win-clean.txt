@@ -1,0 +1,102 @@
+# Ҳадислар — тузатиш (тоза ўрнатиш) Windows учун: Word'да қўшимча ишламаса ёки қотиб қолса.
+# PowerShell'да:   irm https://hadis.abdulloh.org/win-clean.txt | iex
+# cmd'да:          powershell -NoProfile -ExecutionPolicy Bypass -Command "irm https://hadis.abdulloh.org/win-clean.txt | iex"
+# Синов (фақат рўйхат):  $env:HADIS_DRYRUN='1'
+# Нима қилади: қўшимчанинг ҳамма изларини (фақат ўзиники: Id ва домен бўйича) %TEMP%\Hadislar-backup-<сана> папкасига
+# кўчиради (ўчирмайди): HKCU\Software\Microsoft\Office\16.0\WEF\Developer'даги ёзуви (номи/қиймати заҳирада),
+# %LOCALAPPDATA%\HadisUz\manifest.xml, Office қўшимчалар кеши (%LOCALAPPDATA%\Microsoft\Office\16.0\Wef) ичидаги
+# шу қўшимча файллари, WebView2 / WebView папкаларидаги шу сайт маълумотлари. Кейин win.txt билан қайта ўрнатади.
+# Тегмайди: ҳужжатлар, бошқа қўшимчалар ва сайтлар, Scheherazade New шрифти, умумий файллар (LocalStorage, Cookies).
+$ErrorActionPreference = 'Stop'
+[Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
+$Site   = if ($env:HADIS_SITE) { $env:HADIS_SITE } else { 'https://hadis.abdulloh.org' }
+$Mirror = 'https://abdullohukr.github.io/hadis'
+$HostName = 'hadis.abdulloh.org'                 # панел сайти (addin/manifest.xml SourceLocation)
+$Id = '044de12a-604e-4a28-aa7c-acb3b787f180'     # addin/manifest.xml <Id> (tools/build_installers.sh текширади)
+$Dry = [bool]$env:HADIS_DRYRUN
+$WordExe = if ($env:HADIS_WORD_PROC) { $env:HADIS_WORD_PROC -replace '\.exe$', '' } else { 'WINWORD' }
+$Local = $env:LOCALAPPDATA
+$Home2 = Join-Path $Local 'HadisUz'
+$Wef = Join-Path $Local 'Microsoft\Office\16.0\Wef'
+$Backup = Join-Path $env:TEMP ('Hadislar-backup-' + (Get-Date -Format 'yyyyMMdd-HHmmss'))
+
+# Word ёпиқ бўлсин (ўзимиз ёпмаймиз: сақланмаган ҳужжатлар бўлиши мумкин)
+if (-not $Dry) {
+  while (Get-Process $WordExe -ErrorAction SilentlyContinue) {
+    Write-Host 'Word очиқ. Тузатишдан олдин уни тўлиқ ёпинг (сақланмаган ҳужжатларни аввал сақланг).'
+    $a = Read-Host "Word'ни ёпиб, Enter'ни босинг (бекор қилиш: 0)"
+    if ($a -eq '0' -or $a -eq 'q') { Write-Host 'Бекор қилинди, ҳеч нарса ўзгармади.'; return }
+  }
+}
+
+$found = New-Object System.Collections.Generic.List[string]
+function Test-Ours([string]$path) {   # кичик файл ичида Id ёки домен бор-йўқлиги (UTF-8/ASCII ва UTF-16)
+  try {
+    $b = [IO.File]::ReadAllBytes($path)
+    $t = [Text.Encoding]::UTF8.GetString($b)
+    if ($t.IndexOf($Id, [StringComparison]::OrdinalIgnoreCase) -ge 0 -or $t.IndexOf($HostName, [StringComparison]::OrdinalIgnoreCase) -ge 0) { return $true }
+    $u = [Text.Encoding]::Unicode.GetString($b)
+    return ($u.IndexOf($Id, [StringComparison]::OrdinalIgnoreCase) -ge 0 -or $u.IndexOf($HostName, [StringComparison]::OrdinalIgnoreCase) -ge 0)
+  } catch { return $false }
+}
+function Find-Ours([string]$root, [bool]$content, [string[]]$skip) {
+  if (-not (Test-Path -LiteralPath $root)) { return }
+  foreach ($e in (Get-ChildItem -LiteralPath $root -Force -ErrorAction SilentlyContinue)) {
+    $n = $e.Name.ToLower()
+    if ($n.Contains($Id) -or $n.StartsWith("https_$HostName" + '_') -or $n.StartsWith("http_$HostName" + '_')) { $found.Add($e.FullName); continue }
+    if ($e.PSIsContainer) {
+      if ($skip -notcontains $e.Name -and -not ($e.Attributes -band [IO.FileAttributes]::ReparsePoint)) { Find-Ours $e.FullName $content $skip }
+    } elseif ($content -and $e.Length -lt 1MB -and (Test-Ours $e.FullName)) { $found.Add($e.FullName) }
+  }
+}
+Find-Ours $Home2 $true @('Fonts')                                                   # manifest.xml (шрифт қолади)
+Find-Ours $Wef $true @('AppCommands', 'AggregatedCache', 'MetaOS', 'webview2')     # Office қўшимчалар кеши
+Find-Ours (Join-Path $Wef 'webview2') $false @()                                   # WebView2: фақат номи бўйича
+Find-Ours (Join-Path $Local 'Packages\Microsoft.Win32WebViewHost_cw5n1h2txyewy\AC') $false @()
+
+Write-Host $(if ($Dry) { 'Тузатиш (синов, ҳеч нарса кўчирилмайди) — топилган излар:' } else { "Тузатиш: «Ҳадислар» қўшимчасининг излари заҳирага олинади:" })
+$count = 0
+# реестр: WEF\Developer'даги бизнинг ёзувлар (номи = Id, қиймати HadisUz папкасида ёки манифест ичида шу Id)
+$DevPath = 'Software\Microsoft\Office\16.0\WEF\Developer'
+$Dev = [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey($DevPath, -not $Dry)
+if ($Dev) {
+  foreach ($name in $Dev.GetValueNames()) {
+    $v = [string]$Dev.GetValue($name)
+    $ours = ($name -ieq $Id) -or $v.ToLower().StartsWith(($Home2 + '\').ToLower())
+    if (-not $ours -and $v -and (Test-Path -LiteralPath $v -PathType Leaf)) {
+      try { $ours = ([xml](Get-Content -LiteralPath $v -Raw)).OfficeApp.Id -ieq $Id } catch {}
+    }
+    if (-not $ours) { continue }
+    Write-Host "  - реестр: HKCU\$DevPath  $name = $v"; $count++
+    if (-not $Dry) {
+      New-Item -ItemType Directory -Force -Path $Backup | Out-Null
+      Add-Content -LiteralPath (Join-Path $Backup 'registry-WEF-Developer.txt') -Value "HKCU\$DevPath`t$name`t$v"
+      $Dev.DeleteValue($name, $false)
+    }
+  }
+  $Dev.Close()
+}
+# файллар: ичма-ич бўлганлари битта бўлиб кўчади
+$prev = $null
+foreach ($p in ($found | Sort-Object -Unique)) {
+  if ($prev -and $p.StartsWith($prev + '\', [StringComparison]::OrdinalIgnoreCase)) { continue }
+  $prev = $p
+  $rel = if ($p.StartsWith($Local + '\', [StringComparison]::OrdinalIgnoreCase)) { $p.Substring($Local.Length + 1) } else { '_\' + ($p -replace ':', '') }
+  Write-Host "  - %LOCALAPPDATA%\$rel"; $count++
+  if ($Dry) { continue }
+  $dst = Join-Path $Backup $rel
+  try {
+    New-Item -ItemType Directory -Force -Path (Split-Path $dst -Parent) | Out-Null
+    Move-Item -LiteralPath $p -Destination $dst -Force
+  } catch { Write-Host ('    ! кўчирилмади: ' + $_.Exception.Message) }
+}
+if ($count -eq 0) { Write-Host '  (ҳеч нарса топилмади — изи йўқ)' }
+elseif (-not $Dry) { Write-Host "✓ $count та нарса заҳирага кўчирилди: $Backup" }
+Write-Host 'Тегилмади: ҳужжатларингиз, бошқа қўшимчалар ва сайтлар маълумотлари, Scheherazade New шрифти.'
+Write-Host ''
+if ($Dry) { return }
+
+Write-Host 'Энди тоза ўрнатиш:'
+if ($env:HADIS_SRC -and (Test-Path (Join-Path $env:HADIS_SRC 'win.txt'))) { $s = Get-Content (Join-Path $env:HADIS_SRC 'win.txt') -Raw }
+else { try { $s = Invoke-RestMethod "$Site/win.txt" } catch { $s = Invoke-RestMethod "$Mirror/win.txt" } }
+Invoke-Expression $s
